@@ -13,7 +13,8 @@ export const getBooks = async (req, res) => {
 		});
 
 		return res.status(200).json(books);
-	} catch {
+	} catch (error) {
+		console.log(error);
 		return res.status(500).json({ error: "Failed to fetch books" });
 	}
 };
@@ -70,6 +71,7 @@ export const createBook = async (req, res) => {
 			message: "Book created successfully",
 		});
 	} catch (error) {
+		console.log(error);
 		return res
 			.status(500)
 			.json({ error: error.message || "Failed to create book" });
@@ -81,17 +83,16 @@ export const updateBook = async (req, res) => {
 	try {
 		const { userId } = await req.auth();
 		const validate = await bookSchema.safeParseAsync(req.body);
-		console.log(validate.data)
+		console.log(validate.data);
 		if (!validate.success) {
 			return res.status(400).json({
 				error: formatZodError(validate.error),
 			});
 		}
-		
 
 		const { id, ...data } = validate.data;
 
-		console.log("Data:",data)
+		console.log("Data:", data);
 		if (!id) {
 			return res.status(400).json({ message: "Id is required" });
 		}
@@ -114,6 +115,7 @@ export const updateBook = async (req, res) => {
 			message: "Book updated successfully",
 		});
 	} catch (error) {
+		console.log(error);
 		return res.status(500).json({ error: "Failed to update book" });
 	}
 };
